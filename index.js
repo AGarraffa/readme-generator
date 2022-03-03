@@ -104,7 +104,7 @@ const questions = [
     {
         type: 'input',
         name: 'credits',
-        message: 'Please list anyone else who worked on this project with you (separated by a comma)'
+        message: 'Please list anyone else who worked on this project with you (separated by a comma; press enter if no other collaborators)'
         // 5
     },
 
@@ -119,87 +119,159 @@ const questions = [
 
 ]
 
-// for now ignore this
-const  verifyQuestions = [
-        {
-                type: 'list',
-                name: 'check',
-                message: 'Does this look correct?',
-                choices: ['Yes', 'No']
-        },
-
-]
-
+// initializes a global variable;
+let obj = {}
 
 
 function ask() {
 
 inquirer.prompt(questions).then((answers) => {
 
-
-        let { name, title, desc, install, usage, credits, license } = answers;
-
-
-        let edit =  {
-                type: 'list',
-                name: 'select',
-                message: 'Which question do you need to edit?',
-                choices: [ `Name: ${name}`, `Title: ${title}`, `Description: ${desc}`, `Installation: ${install}`, `Usage: ${usage}`, `Credits: ${credits}`, `License: ${license}`]
-        }
+        console.log(answers)
+        obj = answers;
+        edit(obj)
         
-
-        // this adds the edit list to the verifyQuestions (and overwrites if it has one previously)
-        // if (verifyQuestions.length == 1) {
-
-
-        //         console.log(`verifyQuestions is ${verifyQuestions.length} long`);
-        //         console.log('--------------------------------')
-        //         verifyQuestions.push(edit);
-
-        // }
-
-        // else  {
-
-        //         console.log(`verifyQuestions: ${verifyQuestions}`);
-        //         verifyQuestions.pop();
-        //         console.log('--------------------------------')
-        //         console.log(`verifyQuestions: ${verifyQuestions}`);
-        //         console.log('--------------------------------')
-        //         verifyQuestions.push(edit);
-        //         console.log(`verifyQuestions: ${verifyQuestions}`);
-        //         console.log('--------------------------------')
-
-
-        // }
-
-
-
-        fs.writeFile('README.md', `# ${title}
-
-## Description
-${desc}
-        
-
-## Installation
-${install}
-
-## Usage
-${usage}
-
-## Credits
-${name}, ${credits}
-
-## License
-${license}
-
-
-### this file was created usings Alfred Garraffa's Readme generator`, (err) => err ? console.log(err) : console.log('File successfully created'))
-        
-        // end of prompt
         });
         
 
 // end of ask function
 }
 
-ask();
+
+// function that writes the actual file
+function createFile() {
+
+        fs.writeFile('README.md', `# ${obj.title}
+
+        ## Description
+        ${obj.desc}
+                
+        
+        ## Installation
+        ${obj.install}
+        
+        ## Usage
+        ${obj.usage}
+        
+        ## Credits
+        ${obj.name}, ${obj.credits}
+        
+        ## License
+        ${obj.license}
+        
+        
+        ### this file was created usings Alfred Garraffa's Readme generator`, (err) => err ? console.log(err) : console.log('File successfully created'))
+}
+
+// // asks if the information is correct and returns 'Yes' or 'No'
+// function verify(obj) {
+
+//     // iterates over the object and displays each key
+//     for (const key in obj) {
+//         console.log(`${key}: ${obj[key]}`)
+//     }
+
+
+//     const  verifyQuestion = [
+//         {
+//                 type: 'confirm',
+//                 name: 'check',
+//                 message: 'Does this look correct?',
+//         },
+
+// ]
+
+// }
+
+
+function edit() {
+
+    let edit =  [{
+            type: 'list',
+            name: 'select',
+            message: 'Would you like to make any changes?',
+            choices: [ 'Looks good!', `Name: ${obj.name}`, `Title: ${obj.title}`, `Description: ${obj.desc}`, `Installation: ${obj.install}`, `Usage: ${obj.usage}`, `Credits: ${obj.credits}`, `License: ${obj.license}`]
+        }]
+
+
+        inquirer.prompt(edit).then((answer) => {
+
+                console.log(answer);
+                console.log('------------------');
+        
+
+                switch (answer.select) {
+
+                    default: 
+                        createFile();
+                        // break;
+
+                    case `Name: ${obj.name}`:
+                        console.log('name=========================')
+                        inquirer.prompt('Please enter the correct name:').then((answer) => {
+                        obj.name = answer;
+
+                        edit();
+                        // break;
+                        });
+
+                    case `Title: ${obj.title}`:
+                        inquirer.prompt('Question 2:').then((answer) => {
+                        obj.title = answer;
+                        
+                        edit();
+                        // break;
+                        });
+
+                    case `Description: ${obj.desc}`:
+                        inquirer.prompt('Question 2:').then((answer) => {
+                            obj.desc = answer;
+                        
+                        edit();
+                        // break;
+                        });
+
+                    case `Installation: ${obj.install}`:
+                        inquirer.prompt('Question 2:').then((answer) => {
+                            obj.install = answer;
+                        
+                        edit();
+                        // break;
+                        });
+
+                    case `Usage: ${obj.usage}`:
+                        inquirer.prompt('Question 2:').then((answer) => {
+                            obj.usage = answer;
+                        
+                        edit();
+                        // break;
+                        });
+                        
+                    case `Credits: ${obj.credits}`:
+                        inquirer.prompt('Question 2:').then((answer) => {
+                            obj.credits = answer;
+                        
+                        edit();
+                        // break;
+                        });
+
+                    case `License: ${obj.license}`:
+                        inquirer.prompt('Question 2:').then((answer) => {
+                            obj.license = answer;
+                        
+                        edit();
+                        // break;
+                        });
+                }
+            
+            // edit();
+        // end of prompt
+        })
+
+    
+// end of function
+}
+
+// asks the questions, then makes sure you don't want to fix anyhting, then writes the file.
+ask()
+// .then(edit()).then(createFile());
