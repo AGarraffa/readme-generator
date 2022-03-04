@@ -112,7 +112,7 @@ const questions = [
         type: 'list',
         name: 'license',
         message: 'Which license would you like to use?',
-        choices: ['one', 'two', 'three', 'four']
+        choices: ['Apache 2.0 License', 'Boost Software License 1.0', 'BSD 3-Clause License', 'CC0', 'Eclipse Public License 1.0', 'GNU GPL v3', 'ISC', 'MIT', 'Mozilla Public License 2.0', ]
         // 6
     },
 
@@ -120,17 +120,21 @@ const questions = [
 ]
 
 // initializes a global variable;
+// I know the answers given from the ask function are given in an object  format, but I was experimenting with being able to edit the answers later on (still not solved) which is why I placed them in a global object (so the answers can be manipulated outside of the prompt)
 let obj = {}
 
-
-function ask() {
+// function that asks the questions and logs the answers
+function init() {
 
 inquirer.prompt(questions).then((answers) => {
 
-        console.log(answers)
+        // console.log(answers)
         obj = answers;
-        edit(obj)
-        
+
+        // end of prompt
+
+        createFile();
+
         });
         
 
@@ -138,52 +142,139 @@ inquirer.prompt(questions).then((answers) => {
 }
 
 
-// function that writes the actual file
+// function that writes the readme file
 function createFile() {
 
-        fs.writeFile('README.md', `# ${obj.title}
+        let badge = licenseBadge(obj.license)
 
-        ## Description
-        ${obj.desc}
+        let credits = formatCredits(obj.credits)
+
+        fs.writeFile('README.md', 
+        
+`# ${obj.title}
+${badge}
+
+
+
+## Description
+${obj.desc}
                 
         
-        ## Installation
-        ${obj.install}
+## Installation
+${obj.install}
+    
+
+## Usage
+${obj.usage}
+    
+
+## Screenshots
+
+
+## Credits
+* ${obj.name}
+${credits}
         
-        ## Usage
-        ${obj.usage}
         
-        ## Credits
-        ${obj.name}, ${obj.credits}
-        
-        ## License
-        ${obj.license}
-        
-        
-        ### this file was created usings Alfred Garraffa's Readme generator`, (err) => err ? console.log(err) : console.log('File successfully created'))
+<sub><sub>this file was created usings Alfred Garraffa's Readme generator</sup></sub>`, (err) => err ? console.log(err) : console.log('File successfully created'))
 }
 
-// // asks if the information is correct and returns 'Yes' or 'No'
-// function verify(obj) {
-
-//     // iterates over the object and displays each key
-//     for (const key in obj) {
-//         console.log(`${key}: ${obj[key]}`)
-//     }
 
 
-//     const  verifyQuestion = [
-//         {
-//                 type: 'confirm',
-//                 name: 'check',
-//                 message: 'Does this look correct?',
-//         },
+// this function assigns the proper tag to the selected license
+function licenseBadge(license) {
 
-// ]
-
-// }
+    let badge;
 
 
+    switch (license) {
+        case 'Apache 2.0 License':
+            
+            badge = '[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)'
+            break; 
+
+        case 'Boost Software License 1.0': 
+
+            badge = '[![License](https://img.shields.io/badge/License-Boost_1.0-lightblue.svg)](https://www.boost.org/LICENSE_1_0.txt)'
+            break;
+
+        case 'BSD 3-Clause License': 
+            
+            badge = '[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)'
+            break;
+
+        case 'CC0': 
+            
+            badge = '[![License: CC0-1.0](https://licensebuttons.net/l/zero/1.0/80x15.png)](http://creativecommons.org/publicdomain/zero/1.0/)'
+            break;
+
+        case 'Eclipse Public License 1.0': 
+            
+            badge = '[![License](https://img.shields.io/badge/License-EPL_1.0-red.svg)](https://opensource.org/licenses/EPL-1.0)'
+            break;
+
+        case 'GNU GPL v3': 
+            
+            badge = '[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)'
+            break;
+
+        case 'ISC': 
+           
+            badge = '[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)'
+            break;
+
+        case 'MIT': 
+            
+            badge = '[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)'
+            break;
+
+        case 'Mozilla Public License 2.0': 
+            
+            badge = '[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)'
+            break;
+
+    }
+
+    return badge;
+
+
+}
+
+// this function formats the people you worked with to something display ready
+function formatCredits(credits) {
+
+    // checks to make sure there is a value in credits
+    if (credits != '') {
+
+    // splits the string on commas
+    let credArr = credits.split(',');
+    
+    // initializes a new array
+    let newArr = [];
+
+    // iterates over the new array and generates the appropriate format for the readme
+    credArr.forEach((element) => {
+        let newCredit = element.replace(' ', '')
+        newCredit = '*' + ' ' + newCredit + ' \n'
+        newArr.push(newCredit);
+        console.log(newCredit);
+    });
+
+    // joins the array in a string
+    let str = newArr.join('')
+
+    return str;
+
+    }
+
+    else {
+        return;
+    }
+
+}
+
+
+// trying to figure out how to go back and edit the answers so that you can fix any typos before writing the file. As of now it's a WIP
 function edit() {
 
     let edit =  [{
@@ -272,6 +363,8 @@ function edit() {
 // end of function
 }
 
+
+
+
 // asks the questions, then makes sure you don't want to fix anyhting, then writes the file.
-ask()
-// .then(edit()).then(createFile());
+init()
