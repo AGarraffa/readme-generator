@@ -1,65 +1,6 @@
-
-
-// use the generated html from last week as the example
-// prompt the user for all the answers
-// when finished display the answers to verify they look right (yes or no answer)
-// if no, display all the answers with a number associated with them and ask the user to select what needs fixing
-// check again to make sure it looks right
-// when yes, generate the readme
-
-// install inquirer
-
-// const questions = [{}] --- this is the object with all of the questions. include a type: 'input', name: var name, message: the actual question, and maybe a label (this might be in name as well if you can't include more for the prompt)
-
-// const check = [{}] --- this is the array with the yes/no prompt for the answer check
-
-// inquirer.prompt(questions).then((answers) => {
-//     let { this is where you name the answers from the prmopts } = answers;
-
-        // verify(answers)
-
-        // fs.writeFile('README.md')
-        // this will write a blank file
-
-        // fs.appendFile('README.md', here is where you put the actual readme file. Use template literal to call the variables)
-
-
-// function verify(ans)
-// design a function to display all answers and show them to user. Prompt the user for a yes/no answer
-// allow for y and n as suitable inputs
-
-// function answerFix()
-// this function will be within the verify function if the user enters no. this allows you to fix specific answers and resubmit them. call the verify function again at the end of this function
-
-//--------------------------------------------------
-// function list
-
-// initial prompt for information
-
-// log the answers to an object and create the blank readme
-
-// verify the answers
-
-// allow for answer change
-
-
-// append the answers to the readme with proper formatting
-
-
-
-// readme sections:
-// title
-// description
-// table of contents (if needed)
-// installation instructions (npm i inquirer)
-// usage (examples of use and screenshots)
-// credits/ resources
-// license
-// badges
-// features (if needed)
-// how to contribute (if needed)
-// tests (write tests and provide examples on how to run them)
-
+// TODO:
+// walkthrough video using screencastify
+// github format in the function
 
 const inquirer = require('inquirer');
 const fs = require('fs');
@@ -70,7 +11,18 @@ const questions = [
         type: 'input',
         name: 'name',
         message: 'What is your name?',
-        // 0 (index of this question to be used later)
+    },
+
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Please enter your email address:'
+    },
+
+    {
+        type: 'input',
+        name: 'github',
+        message: 'Please enter your github user name:'
     },
     
     {
@@ -83,29 +35,31 @@ const questions = [
     {
         type: 'input',
         name: 'desc',
-        message: "Please describe your application and how it's used"
-        // 2
+        message: "Please describe your application:"
     },
 
     {
         type: 'input',
         name: 'install',
-        message: 'Please describe the install process'
-        // 3
+        message: 'Please describe the install process:'
     },
 
     {
         type: 'input',
         name: 'usage',
-        message: 'Please descaribe how this application is used'
-        // 4
+        message: 'Please describe how this application is used:'
     },
 
     {
         type: 'input',
         name: 'credits',
-        message: 'Please list anyone else who worked on this project with you (separated by a comma; press enter if no other collaborators)'
-        // 5
+        message: 'Please list anyone else who worked on this project with you (separated by a comma; press enter if no other collaborators):'
+    },
+
+    {
+        type: 'input',
+        name: 'dependencies',
+        message: 'Please list any modules used (separated by a comma; press enter if no modules were used:'
     },
 
     {
@@ -113,7 +67,6 @@ const questions = [
         name: 'license',
         message: 'Which license would you like to use?',
         choices: ['Apache 2.0 License', 'Boost Software License 1.0', 'BSD 3-Clause License', 'CC0', 'Eclipse Public License 1.0', 'GNU GPL v3', 'ISC', 'MIT', 'Mozilla Public License 2.0', ]
-        // 6
     },
 
 
@@ -131,10 +84,9 @@ inquirer.prompt(questions).then((answers) => {
         // console.log(answers)
         obj = answers;
 
-        // end of prompt
-
         createFile();
 
+        // end of prompt
         });
         
 
@@ -149,31 +101,65 @@ function createFile() {
 
         let credits = formatCredits(obj.credits)
 
+        let dependencies = formatCredits(obj.dependencies)
+
+        let github = ''
+
+        if (obj.github) {
+            github = `https://github.com/${obj.github}`
+        }
+
         fs.writeFile('README.md', 
         
 `# ${obj.title}
 ${badge}
 
+## Table of Contents
+[Description](#description)
+
+[Installation](#installation)
+
+[Usage](#usage)
+
+[Screenshots](#screenshots)
+
+[Credits](#credits)
+
+[Dependencies](#dependencies)
+
+[Questions](#questions)
+
+---
 
 
 ## Description
 ${obj.desc}
                 
-        
+---     
 ## Installation
 ${obj.install}
     
-
+---
 ## Usage
 ${obj.usage}
     
-
+---
 ## Screenshots
 
-
+---
 ## Credits
 * ${obj.name}
 ${credits}
+
+## Dependencies
+${dependencies}
+
+---
+## Questions
+${obj.email}
+
+${github}
+
         
         
 <sub><sub>this file was created usings Alfred Garraffa's Readme generator</sup></sub>`, (err) => err ? console.log(err) : console.log('File successfully created'))
@@ -257,7 +243,6 @@ function formatCredits(credits) {
         let newCredit = element.replace(' ', '')
         newCredit = '*' + ' ' + newCredit + ' \n'
         newArr.push(newCredit);
-        console.log(newCredit);
     });
 
     // joins the array in a string
@@ -268,7 +253,9 @@ function formatCredits(credits) {
     }
 
     else {
-        return;
+
+        let str = ''
+        return str;
     }
 
 }
