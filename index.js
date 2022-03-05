@@ -1,10 +1,7 @@
-// TODO:
-// walkthrough video using screencastify
-// github format in the function
 
 const inquirer = require('inquirer');
 const fs = require('fs');
-// const { verify } = require('crypto');
+
 
 const questions = [
     {   
@@ -81,7 +78,6 @@ function init() {
 
 inquirer.prompt(questions).then((answers) => {
 
-        // console.log(answers)
         obj = answers;
 
         createFile();
@@ -144,13 +140,11 @@ ${obj.install}
 ${obj.usage}
     
 ---
-## Screenshots
-
----
 ## Credits
 * ${obj.name}
 ${credits}
 
+---
 ## Dependencies
 ${dependencies}
 
@@ -162,7 +156,7 @@ ${github}
 
         
         
-<sub><sub>this file was created usings Alfred Garraffa's Readme generator</sup></sub>`, (err) => err ? console.log(err) : console.log('File successfully created'))
+<sub><sub>this file was created usings Alfred Garraffa's Readme generator</sup></sub>`, (err) => err ? console.log(err) : console.log('File successfully created. Please manually add any screenshots as needed'))
 }
 
 
@@ -353,5 +347,5 @@ function edit() {
 
 
 
-// asks the questions, then makes sure you don't want to fix anyhting, then writes the file.
+// runs the app
 init()
