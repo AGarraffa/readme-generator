@@ -37,7 +37,10 @@ In the terminal type "node index.js" (without quotes) to run the app. Then you w
 ![terminalExample](./assets/images/terminal.jpg)
 ![usageGif](./assets/images/usage.gif)
 
-Please see the video in ./assets/video for a higher resolution version
+Please see the videos at: 
+https://drive.google.com/file/d/1XbB_hrU3X2C91GyGvCOb5T-xbwdkErRF/view
+https://drive.google.com/file/d/12wW_RvVoCTdp6ecWqrZsrTpJUD8Ur1iy/view
+https://drive.google.com/file/d/1aVcFR05EjIrRaaPbT4In7zwSF9nuqWKR/view
 
 ![readme1](./assets/images/readme.gif)
 ![readme2](./assets/images/readme_preview.jpg)
